@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiwang.project.system.mapper.ReHouseMapper">
+    
+    <resultMap type="ReHouse" id="ReHouseResult">
+        <result property="id"    column="id"    />
+        <result property="houseProvinceAddress"    column="houseProvinceAddress"    />
+        <result property="houseCityAddress"    column="houseCityAddress"    />
+        <result property="houseAddress"    column="houseAddress"    />
+        <result property="houseName"    column="houseName"    />
+        <result property="houseDesc"    column="houseDesc"    />
+        <result property="houseImage"    column="houseImage"    />
+        <result property="houseOwnerId"    column="houseOwnerId"    />
+        <result property="houseOwnerName"    column="houseOwnerName"    />
+        <result property="housePrice"    column="housePrice"    />
+        <result property="checkRent"    column="checkRent"    />
+        <result property="checkOpion"    column="checkOpion"    />
+        <result property="checkerId"    column="checkerId"    />
+        <result property="checkerName"    column="checkerName"    />
+        <result property="checkDate"    column="checkDate"    />
+    </resultMap>
+
+    <sql id="selectReHouseVo">
+        select id, houseProvinceAddress, houseCityAddress, houseAddress, houseName, houseDesc, houseImage, houseOwnerId, houseOwnerName, housePrice, checkRent, checkOpion, checkerId, checkerName, checkDate from re_house
+    </sql>
+
+    <select id="selectReHouseList" parameterType="ReHouse" resultMap="ReHouseResult">
+        <include refid="selectReHouseVo"/>
+        <where>  
+            <if test="houseProvinceAddress != null  and houseProvinceAddress != ''"> and houseProvinceAddress = #{houseProvinceAddress}</if>
+            <if test="houseCityAddress != null  and houseCityAddress != ''"> and houseCityAddress = #{houseCityAddress}</if>
+            <if test="houseAddress != null  and houseAddress != ''"> and houseAddress = #{houseAddress}</if>
+            <if test="houseName != null  and houseName != ''"> and houseName like concat('%', #{houseName}, '%')</if>
+            <if test="houseDesc != null  and houseDesc != ''"> and houseDesc = #{houseDesc}</if>
+            <if test="houseImage != null  and houseImage != ''"> and houseImage = #{houseImage}</if>
+            <if test="houseOwnerId != null "> and houseOwnerId = #{houseOwnerId}</if>
+            <if test="houseOwnerName != null  and houseOwnerName != ''"> and houseOwnerName like concat('%', #{houseOwnerName}, '%')</if>
+            <if test="housePrice != null "> and housePrice = #{housePrice}</if>
+            <if test="checkRent != null  and checkRent != ''"> and checkRent = #{checkRent}</if>
+            <if test="checkOpion != null  and checkOpion != ''"> and checkOpion = #{checkOpion}</if>
+            <if test="checkerId != null "> and checkerId = #{checkerId}</if>
+            <if test="checkerName != null  and checkerName != ''"> and checkerName like concat('%', #{checkerName}, '%')</if>
+            <if test="checkDate != null "> and checkDate = #{checkDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectReHouseById" parameterType="Long" resultMap="ReHouseResult">
+        <include refid="selectReHouseVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertReHouse" parameterType="ReHouse" useGeneratedKeys="true" keyProperty="id">
+        insert into re_house
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="houseProvinceAddress != null">houseProvinceAddress,</if>
+            <if test="houseCityAddress != null">houseCityAddress,</if>
+            <if test="houseAddress != null">houseAddress,</if>
+            <if test="houseName != null">houseName,</if>
+            <if test="houseDesc != null">houseDesc,</if>
+            <if test="houseImage != null">houseImage,</if>
+            <if test="houseOwnerId != null">houseOwnerId,</if>
+            <if test="houseOwnerName != null">houseOwnerName,</if>
+            <if test="housePrice != null">housePrice,</if>
+            <if test="checkRent != null">checkRent,</if>
+            <if test="checkOpion != null">checkOpion,</if>
+            <if test="checkerId != null">checkerId,</if>
+            <if test="checkerName != null">checkerName,</if>
+            <if test="checkDate != null">checkDate,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="houseProvinceAddress != null">#{houseProvinceAddress},</if>
+            <if test="houseCityAddress != null">#{houseCityAddress},</if>
+            <if test="houseAddress != null">#{houseAddress},</if>
+            <if test="houseName != null">#{houseName},</if>
+            <if test="houseDesc != null">#{houseDesc},</if>
+            <if test="houseImage != null">#{houseImage},</if>
+            <if test="houseOwnerId != null">#{houseOwnerId},</if>
+            <if test="houseOwnerName != null">#{houseOwnerName},</if>
+            <if test="housePrice != null">#{housePrice},</if>
+            <if test="checkRent != null">#{checkRent},</if>
+            <if test="checkOpion != null">#{checkOpion},</if>
+            <if test="checkerId != null">#{checkerId},</if>
+            <if test="checkerName != null">#{checkerName},</if>
+            <if test="checkDate != null">#{checkDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReHouse" parameterType="ReHouse">
+        update re_house
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="houseProvinceAddress != null">houseProvinceAddress = #{houseProvinceAddress},</if>
+            <if test="houseCityAddress != null">houseCityAddress = #{houseCityAddress},</if>
+            <if test="houseAddress != null">houseAddress = #{houseAddress},</if>
+            <if test="houseName != null">houseName = #{houseName},</if>
+            <if test="houseDesc != null">houseDesc = #{houseDesc},</if>
+            <if test="houseImage != null">houseImage = #{houseImage},</if>
+            <if test="houseOwnerId != null">houseOwnerId = #{houseOwnerId},</if>
+            <if test="houseOwnerName != null">houseOwnerName = #{houseOwnerName},</if>
+            <if test="housePrice != null">housePrice = #{housePrice},</if>
+            <if test="checkRent != null">checkRent = #{checkRent},</if>
+            <if test="checkOpion != null">checkOpion = #{checkOpion},</if>
+            <if test="checkerId != null">checkerId = #{checkerId},</if>
+            <if test="checkerName != null">checkerName = #{checkerName},</if>
+            <if test="checkDate != null">checkDate = #{checkDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReHouseById" parameterType="Long">
+        delete from re_house where id = #{id}
+    </delete>
+
+    <delete id="deleteReHouseByIds" parameterType="String">
+        delete from re_house where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

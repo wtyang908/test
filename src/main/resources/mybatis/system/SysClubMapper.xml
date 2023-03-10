@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiwang.project.system.mapper.SysClubMapper">
+    
+    <resultMap type="SysClub" id="SysClubResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="content"    column="content"    />
+        <result property="clubAdmin"    column="club_admin"    />
+    </resultMap>
+
+    <sql id="selectSysClubVo">
+        select id, name, content, club_admin from sys_club
+    </sql>
+
+    <select id="selectSysClubList" parameterType="SysClub" resultMap="SysClubResult">
+        <include refid="selectSysClubVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="clubAdmin != null  and clubAdmin != ''"> and club_admin = #{clubAdmin}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysClubById" parameterType="Long" resultMap="SysClubResult">
+        <include refid="selectSysClubVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysClub" parameterType="SysClub">
+        insert into sys_club
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="content != null">content,</if>
+            <if test="clubAdmin != null">club_admin,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="content != null">#{content},</if>
+            <if test="clubAdmin != null">#{clubAdmin},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysClub" parameterType="SysClub">
+        update sys_club
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="clubAdmin != null">club_admin = #{clubAdmin},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysClubById" parameterType="Long">
+        delete from sys_club where id = #{id}
+    </delete>
+
+    <delete id="deleteSysClubByIds" parameterType="String">
+        delete from sys_club where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
