@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiwang.project.system.mapper.ReHouseReplyMapper">
+    
+    <resultMap type="ReHouseReply" id="ReHouseReplyResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="houseId"    column="house_id"    />
+        <result property="commentId"    column="comment_id"    />
+        <result property="toUserId"    column="to_user_id"    />
+        <result property="content"    column="content"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <resultMap type="ReHouseReplyList" id="ReHouseReplyResultList">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="houseId"    column="house_id"    />
+        <result property="commentId"    column="comment_id"    />
+        <result property="toUserId"    column="to_user_id"    />
+        <result property="content"    column="content"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="userName"    column="user_name"    />
+        <result property="toUserName"    column="to_user_name"    />
+        <result property="avatar"    column="avatar"    />
+    </resultMap>
+
+    <sql id="selectReHouseReplyVo">
+        select id, user_id, house_id, comment_id, to_user_id, content, create_time from re_house_reply
+    </sql>
+
+
+    <select id="selectHouseReplyByCommentId" parameterType="Long" resultMap="ReHouseReplyResultList">
+        select id, re_house_reply.user_id, house_id, comment_id, to_user_id, content, re_house_reply.create_time,
+               (SELECT nick_name FROM sys_user WHERE sys_user.user_id = re_house_reply.user_id) AS user_name,
+               (SELECT nick_name FROM sys_user WHERE sys_user.user_id = re_house_reply.to_user_id) AS to_user_name,
+               (SELECT avatar FROM sys_user WHERE sys_user.user_id = re_house_reply.user_id) AS avatar
+        from re_house_reply
+        where comment_id=#{commentId}
+    </select>
+
+    <select id="selectReHouseReplyList" parameterType="ReHouseReply" resultMap="ReHouseReplyResult">
+        <include refid="selectReHouseReplyVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="houseId != null "> and house_id = #{houseId}</if>
+            <if test="commentId != null "> and comment_id = #{commentId}</if>
+            <if test="toUserId != null "> and to_user_id = #{toUserId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+        </where>
+    </select>
+    
+    <select id="selectReHouseReplyById" parameterType="Long" resultMap="ReHouseReplyResult">
+        <include refid="selectReHouseReplyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertReHouseReply" parameterType="ReHouseReply">
+        insert into re_house_reply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="houseId != null">house_id,</if>
+            <if test="commentId != null">comment_id,</if>
+            <if test="toUserId != null">to_user_id,</if>
+            <if test="content != null">content,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="houseId != null">#{houseId},</if>
+            <if test="commentId != null">#{commentId},</if>
+            <if test="toUserId != null">#{toUserId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReHouseReply" parameterType="ReHouseReply">
+        update re_house_reply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="houseId != null">house_id = #{houseId},</if>
+            <if test="commentId != null">comment_id = #{commentId},</if>
+            <if test="toUserId != null">to_user_id = #{toUserId},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReHouseReplyById" parameterType="Long">
+        delete from re_house_reply where id = #{id}
+    </delete>
+
+    <delete id="deleteReHouseReplyByIds" parameterType="String">
+        delete from re_house_reply where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
