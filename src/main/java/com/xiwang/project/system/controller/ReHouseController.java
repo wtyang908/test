@@ -1,7 +1,10 @@
 package com.xiwang.project.system.controller;
 
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.xiwang.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +48,32 @@ public class ReHouseController extends BaseController
         List<ReHouse> list = reHouseService.selectReHouseList(reHouse);
         return getDataTable(list);
     }
+
+
+
+    /**
+     * 获取输入的审核员id，name和时间
+     */
+    @GetMapping("/getCheck")
+    public AjaxResult getCheck()
+    {
+        ReHouse reHouse = new ReHouse();
+        long id1 =0;
+        Long id = SecurityUtils.getUserId();
+        String name=SecurityUtils.getUsername();
+        Date date=new Date();
+        reHouse.setCheckerId(id);
+        reHouse.setCheckerName(name);
+        reHouse.setCheckOpion("是");
+        reHouse.setCheckDate(date);
+        reHouse.setId(id1);
+        reHouse.setHouseOwnerId(id1);
+        reHouse.setHousePrice(id1);
+        return success(reHouse);
+    }
+
+
+
 
     /**
      * 导出房屋管理列表

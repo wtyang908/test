@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiwang.project.system.mapper.ReFacilitiesMapper">
+    
+    <resultMap type="ReFacilities" id="ReFacilitiesResult">
+        <result property="id"    column="id"    />
+        <result property="houseId"    column="house_id"    />
+        <result property="bed"    column="bed"    />
+        <result property="internet"    column="internet"    />
+        <result property="tv"    column="tv"    />
+        <result property="fridge"    column="fridge"    />
+        <result property="washingMachine"    column="washing_machine"    />
+        <result property="airConditioner"    column="air_conditioner"    />
+        <result property="waterHeater"    column="water_heater"    />
+        <result property="cooking"    column="cooking"    />
+        <result property="sofa"    column="sofa"    />
+        <result property="wardrobe"    column="wardrobe"    />
+    </resultMap>
+
+    <sql id="selectReFacilitiesVo">
+        select id, house_id, bed, internet, tv, fridge, washing_machine, air_conditioner, water_heater, cooking, sofa, wardrobe from re_facilities
+    </sql>
+
+    <select id="selectReFacilitiesList" parameterType="ReFacilities" resultMap="ReFacilitiesResult">
+        <include refid="selectReFacilitiesVo"/>
+        <where>  
+            <if test="houseId != null "> and house_id = #{houseId}</if>
+            <if test="bed != null "> and bed = #{bed}</if>
+            <if test="internet != null "> and internet = #{internet}</if>
+            <if test="tv != null "> and tv = #{tv}</if>
+            <if test="fridge != null "> and fridge = #{fridge}</if>
+            <if test="washingMachine != null "> and washing_machine = #{washingMachine}</if>
+            <if test="airConditioner != null "> and air_conditioner = #{airConditioner}</if>
+            <if test="waterHeater != null "> and water_heater = #{waterHeater}</if>
+            <if test="cooking != null "> and cooking = #{cooking}</if>
+            <if test="sofa != null "> and sofa = #{sofa}</if>
+            <if test="wardrobe != null "> and wardrobe = #{wardrobe}</if>
+        </where>
+    </select>
+    
+    <select id="selectReFacilitiesById" parameterType="Long" resultMap="ReFacilitiesResult">
+        <include refid="selectReFacilitiesVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertReFacilities" parameterType="ReFacilities" useGeneratedKeys="true" keyProperty="id">
+        insert into re_facilities
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="houseId != null">house_id,</if>
+            <if test="bed != null">bed,</if>
+            <if test="internet != null">internet,</if>
+            <if test="tv != null">tv,</if>
+            <if test="fridge != null">fridge,</if>
+            <if test="washingMachine != null">washing_machine,</if>
+            <if test="airConditioner != null">air_conditioner,</if>
+            <if test="waterHeater != null">water_heater,</if>
+            <if test="cooking != null">cooking,</if>
+            <if test="sofa != null">sofa,</if>
+            <if test="wardrobe != null">wardrobe,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="houseId != null">#{houseId},</if>
+            <if test="bed != null">#{bed},</if>
+            <if test="internet != null">#{internet},</if>
+            <if test="tv != null">#{tv},</if>
+            <if test="fridge != null">#{fridge},</if>
+            <if test="washingMachine != null">#{washingMachine},</if>
+            <if test="airConditioner != null">#{airConditioner},</if>
+            <if test="waterHeater != null">#{waterHeater},</if>
+            <if test="cooking != null">#{cooking},</if>
+            <if test="sofa != null">#{sofa},</if>
+            <if test="wardrobe != null">#{wardrobe},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReFacilities" parameterType="ReFacilities">
+        update re_facilities
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="houseId != null">house_id = #{houseId},</if>
+            <if test="bed != null">bed = #{bed},</if>
+            <if test="internet != null">internet = #{internet},</if>
+            <if test="tv != null">tv = #{tv},</if>
+            <if test="fridge != null">fridge = #{fridge},</if>
+            <if test="washingMachine != null">washing_machine = #{washingMachine},</if>
+            <if test="airConditioner != null">air_conditioner = #{airConditioner},</if>
+            <if test="waterHeater != null">water_heater = #{waterHeater},</if>
+            <if test="cooking != null">cooking = #{cooking},</if>
+            <if test="sofa != null">sofa = #{sofa},</if>
+            <if test="wardrobe != null">wardrobe = #{wardrobe},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReFacilitiesById" parameterType="Long">
+        delete from re_facilities where id = #{id}
+    </delete>
+
+    <delete id="deleteReFacilitiesByIds" parameterType="String">
+        delete from re_facilities where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

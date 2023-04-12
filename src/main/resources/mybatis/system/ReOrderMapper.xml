@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiwang.project.system.mapper.ReOrderMapper">
+    
+    <resultMap type="ReOrder" id="ReOrderResult">
+        <result property="id"    column="id"    />
+        <result property="roomId"    column="roomId"    />
+        <result property="tenantId"    column="tenantId"    />
+        <result property="tenantName"    column="tenantName"    />
+        <result property="startDate"    column="startDate"    />
+        <result property="endDate"    column="endDate"    />
+        <result property="checkOpion"    column="checkOpion"    />
+        <result property="checkerId"    column="checkerId"    />
+        <result property="checkerName"    column="checkerName"    />
+        <result property="checkDate"    column="checkDate"    />
+        <result property="isHistory"    column="isHistory"    />
+        <result property="price"    column="price"    />
+    </resultMap>
+
+    <sql id="selectReOrderVo">
+        select id, roomId, tenantId, tenantName, startDate, endDate, checkOpion, checkerId, checkerName, checkDate, isHistory, price from re_order
+    </sql>
+
+    <select id="selectReOrderList" parameterType="ReOrder" resultMap="ReOrderResult">
+        <include refid="selectReOrderVo"/>
+        <where>  
+            <if test="roomId != null "> and roomId = #{roomId}</if>
+            <if test="tenantId != null "> and tenantId = #{tenantId}</if>
+            <if test="tenantName != null  and tenantName != ''"> and tenantName like concat('%', #{tenantName}, '%')</if>
+            <if test="startDate != null "> and startDate = #{startDate}</if>
+            <if test="endDate != null "> and endDate = #{endDate}</if>
+            <if test="checkOpion != null  and checkOpion != ''"> and checkOpion = #{checkOpion}</if>
+            <if test="checkerId != null "> and checkerId = #{checkerId}</if>
+            <if test="checkerName != null  and checkerName != ''"> and checkerName like concat('%', #{checkerName}, '%')</if>
+            <if test="checkDate != null "> and checkDate = #{checkDate}</if>
+            <if test="isHistory != null  and isHistory != ''"> and isHistory = #{isHistory}</if>
+            <if test="price != null "> and price = #{price}</if>
+        </where>
+    </select>
+
+    <select id="selectReOrderListByTenantId" parameterType="Long" resultMap="ReOrderResult">
+        <include refid="selectReOrderVo"/>
+        <where>
+              tenantId = #{tenantId}
+        </where>
+    </select>
+    
+    <select id="selectReOrderById" parameterType="Long" resultMap="ReOrderResult">
+        <include refid="selectReOrderVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertReOrder" parameterType="ReOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into re_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roomId != null">roomId,</if>
+            <if test="tenantId != null">tenantId,</if>
+            <if test="tenantName != null and tenantName != ''">tenantName,</if>
+            <if test="startDate != null">startDate,</if>
+            <if test="endDate != null">endDate,</if>
+            <if test="checkOpion != null">checkOpion,</if>
+            <if test="checkerId != null">checkerId,</if>
+            <if test="checkerName != null">checkerName,</if>
+            <if test="checkDate != null">checkDate,</if>
+            <if test="isHistory != null and isHistory != ''">isHistory,</if>
+            <if test="price != null">price,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roomId != null">#{roomId},</if>
+            <if test="tenantId != null">#{tenantId},</if>
+            <if test="tenantName != null and tenantName != ''">#{tenantName},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="checkOpion != null">#{checkOpion},</if>
+            <if test="checkerId != null">#{checkerId},</if>
+            <if test="checkerName != null">#{checkerName},</if>
+            <if test="checkDate != null">#{checkDate},</if>
+            <if test="isHistory != null and isHistory != ''">#{isHistory},</if>
+            <if test="price != null">#{price},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReOrder" parameterType="ReOrder">
+        update re_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roomId != null">roomId = #{roomId},</if>
+            <if test="tenantId != null">tenantId = #{tenantId},</if>
+            <if test="tenantName != null and tenantName != ''">tenantName = #{tenantName},</if>
+            <if test="startDate != null">startDate = #{startDate},</if>
+            <if test="endDate != null">endDate = #{endDate},</if>
+            <if test="checkOpion != null">checkOpion = #{checkOpion},</if>
+            <if test="checkerId != null">checkerId = #{checkerId},</if>
+            <if test="checkerName != null">checkerName = #{checkerName},</if>
+            <if test="checkDate != null">checkDate = #{checkDate},</if>
+            <if test="isHistory != null and isHistory != ''">isHistory = #{isHistory},</if>
+            <if test="price != null">price = #{price},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReOrderById" parameterType="Long">
+        delete from re_order where id = #{id}
+    </delete>
+
+    <delete id="deleteReOrderByIds" parameterType="String">
+        delete from re_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
