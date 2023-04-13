@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiwang.project.system.mapper.ReHouseCommentsMapper">
+    
+    <resultMap type="ReHouseComments" id="ReHouseCommentsResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="houseId"    column="house_id"    />
+        <result property="content"    column="content"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+
+
+    <resultMap type="ReHouseCommentsList" id="ReHouseCommentsListResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="houseId"    column="house_id"    />
+        <result property="content"    column="content"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="nickName"    column="nick_name"    />
+        <result property="avatar"    column="avatar"    />
+    </resultMap>
+
+    <sql id="selectReHouseCommentsVo">
+        select id, user_id, house_id, content, create_time from re_house_comments
+    </sql>
+
+    <select id="selectReHouseCommentsListByHouseId"  parameterType="Long" resultMap="ReHouseCommentsListResult">
+        select id,re_house_comments.user_id,house_id,content,re_house_comments.create_time,nick_name,avatar
+        from re_house_comments,sys_user
+        where re_house_comments.user_id = sys_user.user_id and re_house_comments.house_id= #{houseId}
+        order by id ASC
+    </select>
+
+    <select id="selectReHouseCommentsList" parameterType="ReHouseComments" resultMap="ReHouseCommentsResult">
+        <include refid="selectReHouseCommentsVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="houseId != null "> and house_id = #{houseId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+        </where>
+    </select>
+    
+    <select id="selectReHouseCommentsById" parameterType="Long" resultMap="ReHouseCommentsResult">
+        <include refid="selectReHouseCommentsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertReHouseComments" parameterType="ReHouseComments" useGeneratedKeys="true" keyProperty="id">
+        insert into re_house_comments
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="houseId != null">house_id,</if>
+            <if test="content != null">content,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="houseId != null">#{houseId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReHouseComments" parameterType="ReHouseComments">
+        update re_house_comments
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="houseId != null">house_id = #{houseId},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReHouseCommentsById" parameterType="Long">
+        delete from re_house_comments where id = #{id}
+    </delete>
+
+    <delete id="deleteReHouseCommentsByIds" parameterType="String">
+        delete from re_house_comments where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
