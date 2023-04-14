@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiwang.project.system.mapper.ReHouseCollectMapper">
+    
+    <resultMap type="ReHouseCollect" id="ReHouseCollectResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="houseId"    column="house_id"    />
+        <result property="createdDate"    column="created_date"    />
+    </resultMap>
+
+    <sql id="selectReHouseCollectVo">
+        select id, user_id, house_id, created_date from re_house_collect
+    </sql>
+
+    <select id="selectReHouseCollectList" parameterType="ReHouseCollect" resultMap="ReHouseCollectResult">
+        <include refid="selectReHouseCollectVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="houseId != null "> and house_id = #{houseId}</if>
+            <if test="createdDate != null "> and created_date = #{createdDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectReHouseCollectById" parameterType="Long" resultMap="ReHouseCollectResult">
+        <include refid="selectReHouseCollectVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertReHouseCollect" parameterType="ReHouseCollect" useGeneratedKeys="true" keyProperty="id">
+        insert into re_house_collect
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="houseId != null">house_id,</if>
+            <if test="createdDate != null">created_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="houseId != null">#{houseId},</if>
+            <if test="createdDate != null">#{createdDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReHouseCollect" parameterType="ReHouseCollect">
+        update re_house_collect
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="houseId != null">house_id = #{houseId},</if>
+            <if test="createdDate != null">created_date = #{createdDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReHouseCollectById" parameterType="Long">
+        delete from re_house_collect where id = #{id}
+    </delete>
+
+    <delete id="deleteReHouseCollectByIds" parameterType="String">
+        delete from re_house_collect where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
